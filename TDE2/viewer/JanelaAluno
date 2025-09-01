@@ -1,0 +1,105 @@
+package viewer;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import model.Aluno;
+import model.Curso;
+import model.ModelException;
+import model.dao.DaoCurso;
+import model.dao.DaoAluno;
+
+public class JanelaAluno extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField textField_NomeAL;
+	private JTextField textField_Mat;
+	private JComboBox cbC; 
+	
+
+	/**
+	 * Create the frame.
+	 */
+	public JanelaAluno() {
+		setTitle("Cadastrar Aluno"); 
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		
+		JLabel lblNomeAluno = new JLabel("Nome: ");
+		lblNomeAluno.setBounds(10, 11, 46, 14);
+		contentPane.add(lblNomeAluno);
+		
+		JLabel lblMatricula = new JLabel("Matricula: ");
+		lblMatricula.setBounds(10, 36, 83, 14);
+		contentPane.add(lblMatricula);
+		
+		textField_NomeAL = new JTextField();
+		textField_NomeAL.setBounds(66, 8, 224, 20);
+		contentPane.add(textField_NomeAL);
+		textField_NomeAL.setColumns(10);
+		
+		textField_Mat = new JTextField();
+		textField_Mat.setBounds(66, 33, 131, 20);
+		contentPane.add(textField_Mat);
+		textField_Mat.setColumns(10);
+		
+		JLabel lblCursoAl = new JLabel("Curso: ");
+		lblCursoAl.setBounds(10, 61, 46, 14);
+		contentPane.add(lblCursoAl);
+		
+		DaoCurso dao = new DaoCurso(); 
+		cbC = new JComboBox(dao.obterTodos().toArray()); 
+		cbC.setBounds(66, 61, 131, 22);
+		contentPane.add(cbC);  
+		
+		setVisible(true); 
+		
+		JButton btnCadastrarAl = new JButton("Cadastrar");
+		btnCadastrarAl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String nome = textField_NomeAL.getText(); 
+				int matricula = Integer.parseInt(textField_Mat.getText());
+				Curso curso = (Curso)cbC.getSelectedItem(); 
+											try {	
+												Aluno novo = new Aluno(nome, matricula, curso); 
+												DaoAluno dao = new DaoAluno(); 
+												dao.adicionar(novo); 
+												JOptionPane.showMessageDialog(btnCadastrarAl, "Aluno Cadastrado!"); 
+												
+												setVisible(false); 
+											} catch (ModelException e1) {
+												JOptionPane.showMessageDialog(btnCadastrarAl, e1.getMessage()); 
+											}
+			}
+		});
+		btnCadastrarAl.setBounds(10, 104, 89, 23);
+		contentPane.add(btnCadastrarAl);
+		
+		JButton btnCancelarAl = new JButton("Cancelar");
+		btnCancelarAl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false); 
+			}
+		});
+		btnCancelarAl.setBounds(108, 104, 89, 23);
+		contentPane.add(btnCancelarAl);
+		
+	
+	}
+}
