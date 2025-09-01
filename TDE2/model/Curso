@@ -1,0 +1,107 @@
+package model;
+
+import java.util.ArrayList; 
+
+public class Curso {
+	
+	// CONSTANTES 
+	
+	final public static int TAMANHO_MAX_NOME = 40; 
+	
+	// ATRIBUTOS 
+
+	private int codigo;
+	private String nome;
+	
+	// ATRIBUTOS DE RELACIONAMENTO 
+	
+	// LISTA DE ALUNOS 
+	
+	private ArrayList<Aluno> listaAlunos; 
+	
+	// CONSTRUTOR 
+
+	public Curso (int codigo, String nome) throws ModelException {
+				this.setCodigo(codigo);
+				this.setNome(nome); 
+				this.listaAlunos = new ArrayList<Aluno>(); 
+			}
+	
+	// GETTERS E SETTERS 
+			
+	public int getCodigo() {
+		return this.codigo; 
+	}
+	
+	public void setCodigo(int codigo) throws ModelException {
+		Curso.validarCodigo(codigo); 
+		this.codigo = codigo; 
+	}
+	
+	public String getNome() {
+		return this.nome; 
+	}
+	
+	public void setNome(String nome) throws ModelException {
+		Curso.validarNome(nome); 
+		this.nome = nome; 
+	}
+	
+	public ArrayList<Aluno> getListaAlunos() {
+		return new ArrayList<>(this.listaAlunos); 
+	}
+	
+	
+	public void setListaAlunos(ArrayList<Aluno> listaAlunos) throws ModelException {
+		Curso.validarListaAlunos(listaAlunos);
+		this.listaAlunos = listaAlunos; 
+	}
+	
+	// ADICIONAR ALUNO 
+	public boolean adicionarAluno (Aluno novo) throws ModelException {
+		Curso.validarAluno(novo); 
+		return this.listaAlunos.add(novo); 
+	}
+	
+	// REMOVER ALUNO 
+	public boolean removerAluno (Aluno ex) throws ModelException {
+		Curso.validarAluno(ex); 
+		return this.listaAlunos.remove(ex);  
+	}
+	
+	// VALIDAÇÕES 
+	
+	public static void validarListaAlunos(ArrayList<Aluno> listaAlunos) throws ModelException {
+		if (listaAlunos == null) 
+			throw new ModelException("A lista de alunos não pode ser nula!"); 
+	}
+	
+	public static void validarAluno(Aluno e) throws ModelException {
+		if (e == null)
+			throw new ModelException ("Indique um aluno para a turma. "); 
+	}
+	
+	
+	public static void validarCodigo(int codigo) throws ModelException{
+		if (codigo <= 0)
+			throw new ModelException ("Código do curso invalido!"); 
+	}
+	
+	public static void validarNome(String nome) throws ModelException{
+		if (nome == null || nome.length() == 0)
+			throw new ModelException ("O nome do curso não pode ser nulo!");
+		String exRegular = "[A-Za-zÀ-ú ]{2," + TAMANHO_MAX_NOME + "}";; 
+		if (!nome.matches(exRegular)) 
+			throw new ModelException ("Nome invalido!"); 
+		
+	}
+	
+	@Override
+    public String toString() {
+        return nome;
+        
+        
+    }
+}
+
+
