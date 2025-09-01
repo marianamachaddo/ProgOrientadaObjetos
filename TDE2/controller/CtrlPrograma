@@ -1,0 +1,71 @@
+package controller;
+
+import javax.swing.JOptionPane;
+
+import viewer.JanelaPrincipal;
+
+/**
+ * Este é o controlador principal
+ */
+public class CtrlPrograma {
+	//
+	// ATRIBUTOS
+	//
+	private JanelaPrincipal janelaPrincipal;
+	private CtrlIncluirCurso ctrlIncluirCurso;
+	private CtrlIncluirAluno ctrlIncluirAluno;
+	
+	//
+	// MÉTODOS
+	//
+	public CtrlPrograma() {
+		// Solicita a apresentação do viewer
+		this.janelaPrincipal = new JanelaPrincipal(this);
+		this.janelaPrincipal.setVisible(true);
+	}
+	
+	/**
+	 * Iniciando o caso de uso Incluir Curso
+	 */
+	public void iniciarIncluirCurso() {
+		if(this.ctrlIncluirCurso == null)
+			this.ctrlIncluirCurso = new CtrlIncluirCurso(this);
+		else
+			JOptionPane.showMessageDialog(null, "Este Caso de Uso já está em execução!");
+	}
+
+	/**
+	 * Encerrando o caso de uso Incluir Curso
+	 */
+	public void incluirCursoFinalizado() {
+		this.ctrlIncluirCurso = null;		
+	}
+
+	/**
+	 * Iniciando o caso de uso Incluir Aluno
+	 */
+	public void iniciarIncluirAluno() {
+		if(this.ctrlIncluirAluno == null)
+			this.ctrlIncluirAluno = new CtrlIncluirAluno(this);
+		else
+			JOptionPane.showMessageDialog(null, "Este Caso de Uso já está em execução!");
+	}
+
+	/**
+	 * Encerrando o caso de uso Incluir Aluno
+	 */
+	public void incluirAlunoFinalizado() {
+		this.ctrlIncluirAluno = null;		
+	}
+
+	/**
+	 * Encerrando o programa
+	 */
+	public void fecharPrograma() {
+		System.exit(0);
+	}
+
+	public static void main(String[] args) throws Exception {
+		new CtrlPrograma();
+	}
+}
