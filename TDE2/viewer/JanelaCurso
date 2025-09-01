@@ -1,0 +1,104 @@
+package viewer;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import model.Aluno;
+import model.Curso;
+import model.ModelException;
+import model.dao.DaoCurso;
+import model.dao.DaoAluno;
+
+public class JanelaCurso extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField textField_Codigo;
+	private JLabel lblCod; 
+	private JTextField textField_Curso;
+	private JLabel lblNomeCurso; 
+	private JComboBox cbC; 
+
+	/**
+	 * Create the frame.
+	 */
+	public JanelaCurso() {
+		setTitle("Cadastrar Curso");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 138);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null); 
+		
+		
+		JLabel lblCod = new JLabel("Codigo: ");
+		lblCod.setBounds(10, 11, 46, 14);
+		contentPane.add(lblCod);
+		
+		JLabel lblNomeCurso = new JLabel("Curso: ");
+		lblNomeCurso.setBounds(10, 35, 46, 14);
+		contentPane.add(lblNomeCurso);
+		
+		textField_Codigo = new JTextField();
+		textField_Codigo.setBounds(66, 8, 86, 20);
+		contentPane.add(textField_Codigo);
+		textField_Codigo.setColumns(20);
+		
+		textField_Curso = new JTextField();
+		textField_Curso.setBounds(66, 32, 228, 20);
+		contentPane.add(textField_Curso);
+		textField_Curso.setColumns(20);
+		
+		JButton btnCadastroCurso = new JButton("Cadastrar");
+		btnCadastroCurso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String nome = textField_Curso.getText(); 
+				int codigo = Integer.parseInt(textField_Codigo.getText());
+				Curso curso = (Curso)cbC.getSelectedItem(); 
+				
+												try {
+													Curso novo = new Curso(codigo, nome); 
+													DaoCurso dao = new DaoCurso(); 
+													dao.adicionar(novo); 
+													JOptionPane.showMessageDialog(btnCadastroCurso, "Curso Cadastrado com sucesso!"); 
+													setVisible(false); 
+												} catch (ModelException e1) { 
+													JOptionPane.showMessageDialog(btnCadastroCurso, e1.getMessage()); 
+												}
+			}
+		});
+		btnCadastroCurso.setBounds(10, 60, 89, 23);
+		contentPane.add(btnCadastroCurso);
+		
+		JButton btnCancelarCurso = new JButton("Cancelar");
+		btnCancelarCurso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				setVisible(false); 
+			}
+		});
+		btnCancelarCurso.setBounds(109, 60, 89, 23);
+		contentPane.add(btnCancelarCurso);
+
+		
+		DaoCurso dao = new DaoCurso(); 
+		cbC = new JComboBox(dao.obterTodos().toArray()); 
+		cbC.setBounds(121,121,221,22); 
+		contentPane.add(cbC); 
+		
+		this.setVisible(true); 
+	}
+}
