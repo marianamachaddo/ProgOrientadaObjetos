@@ -1,0 +1,75 @@
+package model;
+
+public class Aluno {
+	
+	// CONSTANTES 
+	
+	final public static int TAMANHO_MAX_NOME = 40; 
+	
+	//ATRIBUTOS
+	
+	private String nome; 
+	private int matricula; 
+	
+	//ATRIBUTO DE RELACIONAMENTO 
+	
+	private Curso curso; 
+	
+	// METODOS 
+	
+	public Aluno (String nome, int matricula, Curso curso) throws ModelException {
+		this.setNome(nome); 
+		this.setMatricula(matricula); 
+		this.setCurso(curso); 
+	}
+	
+	public String getNome() {
+		return this.nome; 
+	}
+	
+	public int getMatricula() {
+		return this.matricula; 
+	}
+	
+	public Curso getCurso() {
+		return this.curso; 
+	}
+	
+	public void setNome(String nome) throws ModelException {
+		Aluno.validarNome(nome); 
+		this.nome = nome; 
+	}
+	
+	public void setMatricula(int matricula) throws ModelException {
+		Aluno.validarMatricula(matricula); 
+		this.matricula = matricula; 
+	}
+	
+	public void setCurso(Curso curso) throws ModelException {
+		Aluno.validarCurso(curso); 
+		this.curso = curso; 
+	}
+	
+	
+	// VALIDACOES
+	
+	public static void validarNome(String nome) throws ModelException {
+		if (nome == null || nome.length() == 0)
+			throw new ModelException("O nome do aluno não pode ser nulo!"); 
+		String exRegular = "[A-Za-z ]{5," + TAMANHO_MAX_NOME + "}"; 
+		if (!nome.matches(exRegular))
+			throw new ModelException("O nome passado é invalido!"); 	
+	}
+	
+	public static void validarMatricula(int matricula) throws ModelException {
+		if (matricula <= 0)
+			throw new ModelException("Matricula deve ser maior do que 0!"); 
+	}
+	
+	public static void validarCurso(Curso curso) throws ModelException {
+		if (curso == null) {
+			throw new ModelException("O curso do aluno não pode ser nulo!"); 
+		}
+	}
+		
+}
