@@ -1,0 +1,70 @@
+package viewer;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import controller.CtrlIncluirCurso;
+
+public class JanelaCurso extends JanelaAbstrata {
+
+	private JPanel contentPane;
+	private JTextField tfCodigo;
+	private JLabel lblNewLabel_1;
+	private JTextField tfNome;
+
+	public JanelaCurso(CtrlIncluirCurso ctrl) {
+		super(ctrl);
+		setTitle("Curso");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 418, 246);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Código:");
+		lblNewLabel.setBounds(32, 44, 46, 14);
+		contentPane.add(lblNewLabel);
+		
+		tfCodigo = new JTextField();
+		tfCodigo.setBounds(77, 41, 86, 20);
+		contentPane.add(tfCodigo);
+		tfCodigo.setColumns(10);
+		
+		lblNewLabel_1 = new JLabel("Nome:");
+		lblNewLabel_1.setBounds(32, 86, 46, 14);
+		contentPane.add(lblNewLabel_1);
+		
+		tfNome = new JTextField();
+		tfNome.setBounds(77, 83, 265, 20);
+		contentPane.add(tfNome);
+		tfNome.setColumns(10);
+		
+		JButton btOk = new JButton("Ok");
+		btOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String codigo = tfCodigo.getText();
+				String nome = tfNome.getText();
+				ctrl.incluirNovoCurso(codigo, nome);
+			}
+		});
+		btOk.setBounds(77, 141, 89, 23);
+		contentPane.add(btOk);
+		
+		JButton btCancelar = new JButton("Cancelar");
+		btCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ctrl.encerrar();
+			}
+		});
+		btCancelar.setBounds(253, 141, 89, 23);
+		contentPane.add(btCancelar);
+	}
+}
