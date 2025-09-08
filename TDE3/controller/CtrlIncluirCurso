@@ -1,0 +1,49 @@
+package controller;
+
+import model.Curso;
+import model.ModelException;
+import model.dao.DaoCurso;
+import viewer.JanelaCurso;
+
+public class CtrlIncluirCurso extends CtrlAbstrato{
+
+	private JanelaCurso janela;
+	private Curso       curso;
+
+	public CtrlIncluirCurso(CtrlAbstrato c) {
+		super(c);
+		this.janela = new JanelaCurso(this);
+		this.janela.apresentar();
+	}
+	
+	public void incluirNovoCurso(String codigoStr, String nome) {
+		try {
+			int codigo = Integer.parseInt(codigoStr);
+			this.curso = new Curso(codigo,nome);
+			DaoCurso dao = new DaoCurso();
+			dao.adicionar(this.curso);
+			this.janela.notificar("Curso Criado!");
+			this.encerrar();
+		} catch (NumberFormatException e) {
+			this.janela.notificar("O código deve ser um número inteiro.");
+		}
+		catch (ModelException e1) {
+			this.janela.notificar(e1.getMessage());
+		}
+	}
+	
+	public Object getBemTangivel() {
+		return this.curso;
+	}
+	
+	public void encerrar() {
+		this.janela.setVisible(false);
+		if(this.getCtrlPai() instanceof CtrlPrograma) {
+			CtrlPrograma c = (CtrlPrograma)this.getCtrlPai();
+			c.incluirCursoFinalizado();	
+		} else if(this.getCtrlPai() instanceof CtrlIncluirAluno) {
+			CtrlIncluirAluno c = (CtrlIncluirAluno)this.getCtrlPai();
+			c.incluirCursoFinalizado();	
+		}
+	}
+}
