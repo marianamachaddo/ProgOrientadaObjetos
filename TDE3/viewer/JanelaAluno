@@ -1,0 +1,102 @@
+package viewer;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import controller.CtrlIncluirAluno;
+import model.Curso;
+
+public class JanelaAluno extends JanelaAbstrata {
+
+	private JPanel contentPane;
+	private JTextField tfMatricula;
+	private JLabel lblNewLabel_1;
+	private JTextField tfNome;
+	private JLabel lblNewLabel_2;
+	private JComboBox<Curso> cbCurso;
+
+	public JanelaAluno(CtrlIncluirAluno ctrl) {
+		super(ctrl);
+		setTitle("Aluno");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 509, 266);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Matrícula:");
+		lblNewLabel.setBounds(32, 44, 70, 14);
+		contentPane.add(lblNewLabel);
+		
+		tfMatricula = new JTextField();
+		tfMatricula.setBounds(100, 41, 183, 20);
+		contentPane.add(tfMatricula);
+		tfMatricula.setColumns(10);
+		
+		lblNewLabel_1 = new JLabel("Nome:");
+		lblNewLabel_1.setBounds(32, 86, 46, 14);
+		contentPane.add(lblNewLabel_1);
+		
+		tfNome = new JTextField();
+		tfNome.setBounds(100, 83, 265, 20);
+		contentPane.add(tfNome);
+		tfNome.setColumns(10);
+		
+		JButton btOk = new JButton("Ok");
+		btOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String matriculaStr = tfMatricula.getText();
+				String nome = tfNome.getText();
+				Curso curso = (Curso)cbCurso.getSelectedItem();
+				ctrl.incluirNovoAluno(matriculaStr, nome, curso);
+			}
+		});
+		btOk.setBounds(100, 176, 89, 23);
+		contentPane.add(btOk);
+		
+		JButton btCancelar = new JButton("Cancelar");
+		btCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ctrl.encerrar();
+			}
+		});
+		btCancelar.setBounds(276, 176, 89, 23);
+		contentPane.add(btCancelar);
+		
+		lblNewLabel_2 = new JLabel("Curso:");
+		lblNewLabel_2.setBounds(32, 125, 89, 14);
+		contentPane.add(lblNewLabel_2);
+		
+		cbCurso = new JComboBox<Curso>();
+		cbCurso.setBounds(121, 121, 221, 22);
+		contentPane.add(cbCurso);
+		
+		JButton btIncluirCurso = new JButton("Incluir Curso");
+		btIncluirCurso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ctrl.iniciarIncluirCurso();
+			}
+		});
+		btIncluirCurso.setBounds(373, 121, 110, 23);
+		contentPane.add(btIncluirCurso);
+		
+		this.setVisible(true);
+	}
+	
+	public void atualizarCursos(Object[] listaCursos) {
+		if(this.cbCurso != null) 
+			this.remove(cbCurso);
+		cbCurso = new JComboBox(listaCursos);
+		cbCurso.setBounds(121, 121, 221, 22);
+		contentPane.add(cbCurso);
+	}
+}
