@@ -1,0 +1,99 @@
+package model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Curso {
+	//
+	// CONSTANTES
+	//
+	final public static int TAMANHO_MAX_NOME = 20;
+
+	//
+	// ATRIBUTOS
+	//
+	private int codigo;
+	private String nome;
+
+	//
+	// ATRIBUTOS DE RELACIONAMENTO
+	//
+	private List<Aluno> listaAlunos;
+
+	//
+	// MÉTODOS
+	//
+	public Curso(int codigo, String nome) throws ModelException {
+		this.setCodigo(codigo);
+		this.setNome(nome);
+		this.listaAlunos = new ArrayList<Aluno>();
+	}
+
+	public int getCodigo() {
+		return this.codigo;
+	}
+
+	public void setCodigo(int codigo) throws ModelException {
+		Curso.validarCodigo(codigo);
+		this.codigo = codigo;
+	}
+
+	public String getNome() {
+		return this.nome;
+	}
+
+	public void setNome(String nome) throws ModelException {
+		Curso.validarNome(nome);
+		this.nome = nome;
+	}
+
+	public List<Aluno> getListaAlunos() {
+		return new ArrayList<>(this.listaAlunos);
+	}
+
+	public void setListaAlunos(List<Aluno> listaAlunos) throws ModelException {
+		Curso.validarListaAlunos(listaAlunos);
+		this.listaAlunos = listaAlunos;
+	}
+	
+	public boolean adicionarAluno(Aluno novo) throws ModelException {
+		Curso.validarAluno(novo);
+		return this.listaAlunos.add(novo);
+	}
+	
+	public boolean removerAluno(Aluno ex) throws ModelException {
+		Curso.validarAluno(ex);
+		return this.listaAlunos.remove(ex);		
+	}
+
+	public String toString() {
+		return this.nome;
+	}
+	
+	public static void validarCodigo(int codigo) throws ModelException {
+		if (codigo <= 0)
+			throw new ModelException("O código do Curso deve ser maior que zero!");
+	}
+
+	public static void validarNome(String nome) throws ModelException {
+		if (nome == null || nome.length() == 0)
+			throw new ModelException("O nome do Curso não pode ser nulo!");
+		if (nome.length() > TAMANHO_MAX_NOME)
+			throw new ModelException("O nome deve ter até " + TAMANHO_MAX_NOME + " caracteres!");
+		for (int i = 0; i < nome.length(); i++) {
+			char c = nome.charAt(i);
+			if (!Character.isAlphabetic(c) && !Character.isSpaceChar(c))
+				throw new ModelException("O caracter na posição " + i + " não é válido!");
+		}
+	}
+
+	public static void validarListaAlunos(List<Aluno> listaAlunos) throws ModelException {
+		if (listaAlunos == null)
+			throw new ModelException("A Lista de Alunos do Curso não pode ser nula!");
+	}
+
+	public static void validarAluno(Aluno a) throws ModelException {
+		if(a == null)
+			throw new ModelException("É necessário indicar o aluno para essa operação");
+	}
+}
