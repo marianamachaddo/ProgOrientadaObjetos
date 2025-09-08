@@ -1,0 +1,54 @@
+package viewer;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import controller.CtrlPrograma;
+
+public class JanelaPrincipal extends JanelaAbstrata {
+
+	private JPanel contentPane;
+
+	public JanelaPrincipal(CtrlPrograma ctrl) {
+		super(ctrl);
+		setTitle("Menu Principal");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 529, 207);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);		
+		contentPane.setLayout(null);
+		
+		JButton btCurso = new JButton("Incluir Curso");
+		btCurso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {				
+				ctrl.iniciarIncluirCurso();
+			}
+		});
+		btCurso.setBounds(33, 53, 119, 66);
+		contentPane.add(btCurso);
+		
+		JButton btFechar = new JButton("Fechar");
+		btFechar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ctrl.encerrar();
+			}
+		});
+		btFechar.setBounds(366, 53, 119, 66);
+		contentPane.add(btFechar);
+		
+		JButton btAluno = new JButton("Incluir Aluno");
+		btAluno.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ctrl.iniciarIncluirAluno();
+			}
+		});
+		btAluno.setBounds(195, 53, 119, 66);
+		contentPane.add(btAluno);
+	}
+}
