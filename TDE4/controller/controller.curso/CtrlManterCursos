@@ -1,0 +1,60 @@
+package controller.curso;
+
+import java.util.ArrayList;
+import controller.CtrlAbstrato;
+import controller.CtrlPrograma;
+import model.Curso;
+import model.dao.DaoCurso;
+import viewer.JanelaConsultarCursos;
+
+public class CtrlManterCursos extends CtrlAbstrato {
+    private JanelaConsultarCursos janela;
+    private CtrlAbstratoCurso ctrlCurso;
+
+    public CtrlManterCursos(CtrlAbstrato ctrlPai) {
+        super(ctrlPai);
+        DaoCurso dao = new DaoCurso();
+        ArrayList<Curso> lista = dao.obterTodos();
+        this.janela = new JanelaConsultarCursos(this, lista);
+        this.janela.apresentar();
+    }
+
+    public void iniciarIncluirCurso() {
+        this.ctrlCurso = new CtrlIncluirCurso(this);
+    }
+
+    public void iniciarAlterarCurso(Curso cursoSelecionado) {
+        if (cursoSelecionado != null) {
+            this.ctrlCurso = new CtrlAlterarCurso(this, cursoSelecionado);
+        } else {
+            this.janela.notificar("Selecione um curso para alterar.");
+        }
+    }
+
+    public void iniciarExcluirCurso(Curso cursoSelecionado) {
+        if (cursoSelecionado != null) {
+            this.ctrlCurso = new CtrlExcluirCurso(this, cursoSelecionado);
+        } else {
+            this.janela.notificar("Selecione um curso para excluir.");
+        }
+    }
+
+    public void fimOperacaoCurso() {
+        this.ctrlCurso = null;
+        DaoCurso dao = new DaoCurso();
+        ArrayList<Curso> lista = dao.obterTodos();
+        this.janela.atualizarDados(lista);
+    }
+
+    @Override
+    public void encerrar() {
+        this.janela.fechar();
+        CtrlPrograma ctrl = (CtrlPrograma) getCtrlPai();
+        ctrl.manterCursosFinalizado();
+    }
+
+    @Override
+    public Object getBemTangivel() {
+        return null;
+    }
+}
