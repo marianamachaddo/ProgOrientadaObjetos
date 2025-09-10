@@ -1,0 +1,54 @@
+package controller.aluno;
+
+import controller.CtrlAbstrato;
+import model.Aluno;
+import model.Curso;
+import model.ModelException;
+import model.dao.DaoAluno;
+import model.dao.DaoCurso;
+import viewer.JanelaAluno;
+
+public class CtrlAlterarAluno extends CtrlAbstrato {
+    private Aluno aluno;
+    private JanelaAluno janela;
+
+    public CtrlAlterarAluno(CtrlManterAlunos c, Aluno a) {
+        super(c);
+        this.aluno = a;
+        this.janela = new JanelaAluno(this, this.aluno);
+        DaoCurso dao = new DaoCurso();
+        this.janela.atualizarCursos(dao.obterTodos().toArray());
+        this.janela.apresentar();
+    }
+
+    public void alterarAluno(String matriculaStr, String nome, Curso curso) {
+        try {
+            int matricula = Integer.parseInt(matriculaStr);
+            this.aluno.setMatricula(matricula);
+            this.aluno.setNome(nome);
+            this.aluno.setCurso(curso);
+
+            DaoAluno dao = new DaoAluno();
+            dao.alterar(this.aluno);
+
+            this.janela.notificar("Aluno Alterado com Sucesso!");
+            this.encerrar();
+        } catch (NumberFormatException e) {
+            this.janela.notificar("A matrícula deve ser um número inteiro.");
+        } catch (ModelException e1) {
+            this.janela.notificar(e1.getMessage());
+        }
+    }
+
+    @Override
+    public void encerrar() {
+        this.janela.fechar();
+        CtrlManterAlunos c = (CtrlManterAlunos) this.getCtrlPai();
+        c.alterarAlunoFinalizado();
+    }
+
+    @Override
+    public Object getBemTangivel() {
+        return this.aluno;
+    }
+}
