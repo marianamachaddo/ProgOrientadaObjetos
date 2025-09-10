@@ -1,0 +1,37 @@
+package controller.aluno;
+
+import controller.CtrlAbstrato;
+import model.Aluno;
+import model.dao.DaoAluno;
+import viewer.JanelaAluno;
+
+public class CtrlExcluirAluno extends CtrlAbstrato {
+    private Aluno aluno;
+    private JanelaAluno janela;
+
+    public CtrlExcluirAluno(CtrlManterAlunos c, Aluno a) {
+        super(c);
+        this.aluno = a;
+        this.janela = new JanelaAluno(this, this.aluno);
+        this.janela.apresentar();
+    }
+
+    public void excluirAluno() {
+        DaoAluno dao = new DaoAluno();
+        dao.excluir(this.aluno);
+        this.janela.notificar("Aluno Excluído com Sucesso!");
+        this.encerrar();
+    }
+
+    @Override
+    public void encerrar() {
+        this.janela.fechar();
+        CtrlManterAlunos c = (CtrlManterAlunos) this.getCtrlPai();
+        c.excluirAlunoFinalizado();
+    }
+
+    @Override
+    public Object getBemTangivel() {
+        return this.aluno;
+    }
+}
