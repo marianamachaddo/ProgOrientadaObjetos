@@ -1,0 +1,31 @@
+package model.dao;
+
+import java.util.ArrayList;
+import model.Curso;
+
+public class DaoCurso {
+    private static ArrayList<Curso> listaCursos;
+
+    static {
+        DaoCurso.listaCursos = new ArrayList<Curso>();
+    }
+
+    public boolean adicionar(Curso novo) {
+        return DaoCurso.listaCursos.add(novo);
+    }
+
+    public boolean alterar(Curso curso) {
+        if (DaoCurso.listaCursos.contains(curso)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean excluir(Curso curso) {
+        return DaoCurso.listaCursos.remove(curso);
+    }
+
+    public ArrayList<Curso> obterTodos() {
+        return new ArrayList<Curso>(DaoCurso.listaCursos);
+    }
+}
