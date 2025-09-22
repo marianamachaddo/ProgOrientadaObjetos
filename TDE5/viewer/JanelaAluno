@@ -1,0 +1,128 @@
+package viewer;
+
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import controller.CtrlAbstrato;
+import controller.aluno.CtrlAlterarAluno;
+import controller.aluno.CtrlExcluirAluno;
+import controller.aluno.CtrlIncluirAluno;
+import model.Aluno;
+import model.Curso;
+
+public class JanelaAluno extends JanelaAbstrata {
+
+    private JPanel contentPane;
+    private JTextField tfMatricula;
+    private JTextField tfNome;
+    private JComboBox<Curso> cbCurso;
+    private JButton btOk;
+
+    public JanelaAluno(CtrlAbstrato ctrl, Aluno aluno) {
+        this(ctrl);
+
+        tfMatricula.setText(String.valueOf(aluno.getMatricula()));
+        tfNome.setText(aluno.getNome());
+        cbCurso.setSelectedItem(aluno.getCurso());
+
+        if (ctrl instanceof CtrlExcluirAluno) {
+            setTitle("Excluir Aluno");
+            tfMatricula.setEnabled(false);
+            tfNome.setEnabled(false);
+            cbCurso.setEnabled(false);
+            btOk.setText("Excluir");
+
+            JLabel lbMsg = new JLabel("Deseja realmente excluir este aluno?");
+            lbMsg.setForeground(Color.RED);
+            lbMsg.setFont(new Font("Calibri", Font.BOLD, 14));
+            lbMsg.setBounds(100, 150, 265, 14);
+            contentPane.add(lbMsg);
+        } else { // Alterar
+            setTitle("Alterar Aluno");
+            btOk.setText("Alterar");
+        }
+    }
+
+    public JanelaAluno(CtrlAbstrato ctrl) {
+        super(ctrl);
+        setTitle("Incluir Aluno");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setBounds(100, 100, 509, 266);
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
+
+        JLabel lblNewLabel = new JLabel("Matrícula:");
+        lblNewLabel.setBounds(32, 44, 70, 14);
+        contentPane.add(lblNewLabel);
+
+        tfMatricula = new JTextField();
+        tfMatricula.setBounds(100, 41, 183, 20);
+        contentPane.add(tfMatricula);
+        tfMatricula.setColumns(10);
+
+        JLabel lblNewLabel_1 = new JLabel("Nome:");
+        lblNewLabel_1.setBounds(32, 86, 46, 14);
+        contentPane.add(lblNewLabel_1);
+
+        tfNome = new JTextField();
+        tfNome.setBounds(100, 83, 265, 20);
+        contentPane.add(tfNome);
+        tfNome.setColumns(10);
+
+        btOk = new JButton("Ok");
+        btOk.addActionListener(e -> {
+            String matriculaStr = tfMatricula.getText();
+            String nome = tfNome.getText();
+            Curso curso = (Curso) cbCurso.getSelectedItem();
+
+            if (getCtrl() instanceof CtrlIncluirAluno) {
+                ((CtrlIncluirAluno) getCtrl()).incluirNovoAluno(matriculaStr, nome, curso);
+            } else if (getCtrl() instanceof CtrlAlterarAluno) {
+                ((CtrlAlterarAluno) getCtrl()).alterarAluno(matriculaStr, nome, curso);
+            } else if (getCtrl() instanceof CtrlExcluirAluno) {
+                ((CtrlExcluirAluno) getCtrl()).excluirAluno();
+            }
+        });
+        btOk.setBounds(100, 176, 89, 23);
+        contentPane.add(btOk);
+
+        JButton btCancelar = new JButton("Cancelar");
+        btCancelar.addActionListener(e -> getCtrl().encerrar());
+        btCancelar.setBounds(276, 176, 89, 23);
+        contentPane.add(btCancelar);
+
+        JLabel lblNewLabel_2 = new JLabel("Curso:");
+        lblNewLabel_2.setBounds(32, 125, 89, 14);
+        contentPane.add(lblNewLabel_2);
+
+        cbCurso = new JComboBox<Curso>();
+        cbCurso.setBounds(121, 121, 221, 22);
+        contentPane.add(cbCurso);
+
+        if (!(ctrl instanceof CtrlExcluirAluno)) {
+            JButton btIncluirCurso = new JButton("Incluir Curso");
+            btIncluirCurso.addActionListener(e -> {
+                if (getCtrl() instanceof CtrlIncluirAluno) {
+                    ((CtrlIncluirAluno) getCtrl()).iniciarIncluirCurso();
+                }
+            });
+            btIncluirCurso.setBounds(373, 121, 110, 23);
+            contentPane.add(btIncluirCurso);
+        }
+    }
+
+    public void atualizarCursos(Object[] listaCursos) {
+        cbCurso.removeAllItems();
+        for (Object c : listaCursos) {
+            cbCurso.addItem((Curso) c);
+        }
+    }
+}
