@@ -1,0 +1,41 @@
+package controller.curso;
+
+import controller.CtrlAbstrato;
+import controller.aluno.CtrlIncluirAluno;
+import model.Curso;
+import viewer.JanelaCurso;
+
+abstract public class CtrlAbstratoCurso extends CtrlAbstrato {
+    protected JanelaCurso janela;
+    protected Curso curso;
+
+    public CtrlAbstratoCurso(CtrlAbstrato ctrlPai, Curso curso) {
+        super(ctrlPai);
+        this.curso = curso;
+        this.janela = new JanelaCurso(this, curso);
+        this.janela.apresentar();
+    }
+
+    public CtrlAbstratoCurso(CtrlAbstrato ctrlPai) {
+        this(ctrlPai, null);
+    }
+
+    abstract public void efetuar(String codigo, String nome);
+
+    @Override
+    public void encerrar() {
+        this.janela.fechar();
+        if (this.getCtrlPai() instanceof CtrlManterCursos) {
+            CtrlManterCursos c = (CtrlManterCursos) this.getCtrlPai();
+            c.fimOperacaoCurso();
+        } else if (this.getCtrlPai() instanceof CtrlIncluirAluno) {
+            CtrlIncluirAluno c = (CtrlIncluirAluno) this.getCtrlPai();
+            c.incluirCursoFinalizado();
+        }
+    }
+
+    @Override
+    public Object getBemTangivel() {
+        return this.curso;
+    }
+}
