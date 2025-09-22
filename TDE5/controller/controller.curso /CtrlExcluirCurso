@@ -1,0 +1,20 @@
+package controller.curso;
+
+import controller.CtrlAbstrato;
+import model.Curso;
+import model.dao.DaoCurso;
+
+public class CtrlExcluirCurso extends CtrlAbstratoCurso {
+
+    public CtrlExcluirCurso(CtrlAbstrato c, Curso curso) {
+        super(c, curso);
+    }
+
+    @Override
+    public void efetuar(String codigo, String nome) {
+        DaoCurso dao = new DaoCurso();
+        dao.excluir(this.curso);
+        this.janela.notificar("Curso Excluído!");
+        this.encerrar();
+    }
+}
