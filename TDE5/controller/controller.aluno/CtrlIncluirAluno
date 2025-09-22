@@ -1,0 +1,65 @@
+package controller.aluno;
+
+import controller.CtrlAbstrato;
+import controller.curso.CtrlIncluirCurso;
+import model.Aluno;
+import model.Curso;
+import model.ModelException;
+import model.dao.DaoAluno;
+import model.dao.DaoCurso;
+import viewer.JanelaAluno;
+
+public class CtrlIncluirAluno extends CtrlAbstrato {
+
+    private Aluno aluno;
+    private JanelaAluno janela;
+    private CtrlIncluirCurso ctrlIncluirCurso;
+
+    public CtrlIncluirAluno(CtrlManterAlunos c) {
+        super(c);
+        this.janela = new JanelaAluno(this);
+        DaoCurso dao = new DaoCurso();
+        this.janela.atualizarCursos(dao.obterTodos().toArray());
+        this.janela.apresentar();
+    }
+
+    public void incluirNovoAluno(String matriculaStr, String nome, Curso curso) {
+        try {
+            int matricula = Integer.parseInt(matriculaStr);
+            this.aluno = new Aluno(matricula, nome, curso);
+            DaoAluno dao = new DaoAluno();
+            dao.adicionar(this.aluno);
+            this.janela.notificar("Aluno Criado!");
+            this.encerrar();
+        } catch (NumberFormatException e) {
+            this.janela.notificar("A matrícula deve ser um número inteiro.");
+        } catch (ModelException e1) {
+            this.janela.notificar(e1.getMessage());
+        }
+    }
+
+    public void iniciarIncluirCurso() {
+        if (this.ctrlIncluirCurso == null)
+            this.ctrlIncluirCurso = new CtrlIncluirCurso(this);
+        else
+            this.janela.notificar("Este Caso de Uso já está em execução!");
+    }
+
+    public void incluirCursoFinalizado() {
+        this.ctrlIncluirCurso = null;
+        DaoCurso dao = new DaoCurso();
+        this.janela.atualizarCursos(dao.obterTodos().toArray());
+    }
+
+    @Override
+    public Object getBemTangivel() {
+        return this.aluno;
+    }
+
+    @Override
+    public void encerrar() {
+        this.janela.fechar();
+        CtrlManterAlunos c = (CtrlManterAlunos) this.getCtrlPai();
+        c.incluirAlunoFinalizado();
+    }
+}
