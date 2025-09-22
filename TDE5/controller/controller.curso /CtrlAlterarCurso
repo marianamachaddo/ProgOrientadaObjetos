@@ -1,0 +1,30 @@
+package controller.curso;
+
+import controller.CtrlAbstrato;
+import model.Curso;
+import model.ModelException;
+import model.dao.DaoCurso;
+
+public class CtrlAlterarCurso extends CtrlAbstratoCurso {
+
+    public CtrlAlterarCurso(CtrlAbstrato c, Curso curso) {
+        super(c, curso);
+    }
+
+    @Override
+    public void efetuar(String codigoStr, String nome) {
+        try {
+            int codigo = Integer.parseInt(codigoStr);
+            this.curso.setCodigo(codigo);
+            this.curso.setNome(nome);
+            DaoCurso dao = new DaoCurso();
+            dao.alterar(this.curso);
+            this.janela.notificar("Curso Alterado!");
+            this.encerrar();
+        } catch (NumberFormatException e) {
+            this.janela.notificar("O código deve ser um número inteiro.");
+        } catch (ModelException e1) {
+            this.janela.notificar(e1.getMessage());
+        }
+    }
+}
