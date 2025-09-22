@@ -1,0 +1,76 @@
+package controller.aluno;
+
+import java.util.ArrayList;
+import controller.CtrlAbstrato;
+import controller.CtrlPrograma;
+import model.Aluno;
+import model.dao.DaoAluno;
+import viewer.JanelaConsultarAlunos;
+
+public class CtrlManterAlunos extends CtrlAbstrato {
+    private JanelaConsultarAlunos janela;
+    private CtrlIncluirAluno ctrlIncluirAluno;
+    private CtrlAlterarAluno ctrlAlterarAluno;
+    private CtrlExcluirAluno ctrlExcluirAluno;
+
+    public CtrlManterAlunos(CtrlPrograma c) {
+        super(c);
+        DaoAluno dao = new DaoAluno();
+        this.janela = new JanelaConsultarAlunos(this, dao.obterTodos());
+        this.janela.apresentar();
+    }
+
+    public void iniciarIncluirAluno() {
+        if (this.ctrlIncluirAluno == null)
+            this.ctrlIncluirAluno = new CtrlIncluirAluno(this);
+        else
+            this.janela.notificar("Caso de Uso 'Incluir Aluno' já em execução.");
+    }
+
+    public void iniciarAlterarAluno(Aluno aluno) {
+        if (this.ctrlAlterarAluno == null)
+            this.ctrlAlterarAluno = new CtrlAlterarAluno(this, aluno);
+        else
+            this.janela.notificar("Caso de Uso 'Alterar Aluno' já em execução.");
+    }
+
+    public void iniciarExcluirAluno(Aluno aluno) {
+        if (this.ctrlExcluirAluno == null)
+            this.ctrlExcluirAluno = new CtrlExcluirAluno(this, aluno);
+        else
+            this.janela.notificar("Caso de Uso 'Excluir Aluno' já em execução.");
+    }
+
+    public void incluirAlunoFinalizado() {
+        this.ctrlIncluirAluno = null;
+        this.atualizarListaAlunos();
+    }
+
+    public void alterarAlunoFinalizado() {
+        this.ctrlAlterarAluno = null;
+        this.atualizarListaAlunos();
+    }
+
+    public void excluirAlunoFinalizado() {
+        this.ctrlExcluirAluno = null;
+        this.atualizarListaAlunos();
+    }
+
+    private void atualizarListaAlunos() {
+        DaoAluno dao = new DaoAluno();
+        ArrayList<Aluno> lista = dao.obterTodos();
+        this.janela.atualizarDados(lista);
+    }
+
+    @Override
+    public void encerrar() {
+        this.janela.fechar();
+        CtrlPrograma c = (CtrlPrograma) this.getCtrlPai();
+        c.manterAlunosFinalizado();
+    }
+
+    @Override
+    public Object getBemTangivel() {
+        return null;
+    }
+}
