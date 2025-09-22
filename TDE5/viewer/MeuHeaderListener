@@ -1,0 +1,53 @@
+package viewer;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JTable;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+public class MeuHeaderListener extends MouseAdapter {
+    private JTable tabela;
+    private TableRowSorter<TableModel> sorter;
+
+    public MeuHeaderListener(JTable table) {
+        this.tabela = table;
+        TableModel tableModel = this.tabela.getModel();
+        this.sorter = new TableRowSorter<>(tableModel);
+        this.tabela.setRowSorter(sorter);
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        int col = this.tabela.columnAtPoint(e.getPoint());
+        if (col != -1) {
+            SortOrder oldOrder = getColumnSortOrder(col);
+            SortOrder newOrder;
+            if (oldOrder == SortOrder.ASCENDING) {
+                newOrder = SortOrder.DESCENDING;
+            } else if (oldOrder == SortOrder.DESCENDING) {
+                newOrder = SortOrder.UNSORTED;
+            } else {
+                newOrder = SortOrder.ASCENDING;
+            }
+
+            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+            if (newOrder != SortOrder.UNSORTED) {
+                sortKeys.add(new RowSorter.SortKey(col, newOrder));
+            }
+            sorter.setSortKeys(sortKeys);
+        }
+    }
+
+    private SortOrder getColumnSortOrder(int columnIndex) {
+        List<? extends RowSorter.SortKey> sortKeys = sorter.getSortKeys();
+        if (sortKeys.size() > 0 && sortKeys.get(0).getColumn() == columnIndex) {
+            return sortKeys.get(0).getSortOrder();
+        }
+        return SortOrder.UNSORTED;
+    }
+}
