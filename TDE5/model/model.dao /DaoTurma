@@ -1,0 +1,27 @@
+package model.dao;
+
+import java.util.ArrayList;
+import model.Turma;
+
+public class DaoTurma {
+    private static ArrayList<Turma> listaTurmas = new ArrayList<>();
+
+    public boolean adicionar(Turma t) {
+        return listaTurmas.add(t);
+    }
+
+    public boolean alterar(Turma t) {
+        if (listaTurmas.contains(t)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean excluir(Turma t) {
+        return listaTurmas.remove(t);
+    }
+
+    public ArrayList<Turma> obterTodos() {
+        return new ArrayList<>(listaTurmas);
+    }
+}
