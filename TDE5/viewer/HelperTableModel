@@ -20,11 +20,12 @@ public class HelperTableModel {
         Class<?> classe = objetos[0].getClass();
         for (Method m : classe.getMethods()) {
             String nomeMetodo = m.getName();
-            // Evita métodos que retornam listas para não poluir a tabela
             if (nomeMetodo.startsWith("get") && !nomeMetodo.equals("getClass") && !m.getReturnType().equals(java.util.List.class) ) {
                 listaAtributos.add(nomeMetodo.substring(3));
             }
         }
+        
+        java.util.Collections.sort(listaAtributos);
 
         int qtde = objetos.length;
         tabela = new Object[qtde][listaAtributos.size()];
@@ -51,8 +52,6 @@ public class HelperTableModel {
     public Object[][] getTabela() {
         return this.tabela;
     }
-
-
 
     public DefaultTableModel getTableModel() {
         return this.tableModel;
