@@ -18,7 +18,7 @@ public class JanelaCurso extends JanelaAbstrata<CtrlAbstratoCurso> {
     private JTextField tfNome;
 
     public JanelaCurso(CtrlAbstratoCurso ctrl, Curso curso) {
-        this(ctrl); 
+        this(ctrl);
 
         if (curso != null) {
             tfCodigo.setText(String.valueOf(curso.getCodigo()));
