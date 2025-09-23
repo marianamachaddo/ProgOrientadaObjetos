@@ -14,7 +14,7 @@ public class JanelaConsultarAlunos extends JanelaAbstrata<CtrlManterAlunos> {
     private JPanel contentPane;
     private JTable tabela;
     private ArrayList<Aluno> conjAlunos;
-    private JScrollPane scrollPane; // <-- MUDANÇA 1: JScrollPane vira um atributo da classe
+    private JScrollPane scrollPane;
 
     public JanelaConsultarAlunos(CtrlManterAlunos ctrl, ArrayList<Aluno> lista) {
         super(ctrl);
@@ -31,12 +31,10 @@ public class JanelaConsultarAlunos extends JanelaAbstrata<CtrlManterAlunos> {
         btSair.setBounds(435, 247, 89, 23);
         contentPane.add(btSair);
 
-        // MUDANÇA 2: Cria o JScrollPane vazio aqui
         scrollPane = new JScrollPane();
         scrollPane.setBounds(10, 11, 514, 220);
         contentPane.add(scrollPane);
         
-        // MUDANÇA 3: A chamada para atualizar os dados agora vai criar a tabela e colocá-la no JScrollPane
         atualizarDados(lista);
 
         JButton btIncluir = new JButton("Incluir");
@@ -67,17 +65,14 @@ public class JanelaConsultarAlunos extends JanelaAbstrata<CtrlManterAlunos> {
         contentPane.add(btExcluir);
     }
 
-    // MUDANÇA 4: Método de atualização foi reescrito
     public void atualizarDados(ArrayList<Aluno> lista) {
         this.conjAlunos = lista;
         Aluno[] arrayAlunos = lista.toArray(new Aluno[0]);
         HelperTableModel h = new HelperTableModel(arrayAlunos);
         
-        // Sempre cria uma nova tabela com os dados mais recentes
         this.tabela = new JTable(h.getTableModel());
         new MeuHeaderListener(this.tabela); 
         
-        // Coloca a nova tabela dentro do JScrollPane
         this.scrollPane.setViewportView(this.tabela);
         
         this.scrollPane.revalidate();
@@ -87,7 +82,8 @@ public class JanelaConsultarAlunos extends JanelaAbstrata<CtrlManterAlunos> {
     public Aluno obterLinhaSelecionada() {
         int numLinha = this.tabela.getSelectedRow();
         if (numLinha != -1) {
-            int matricula = Integer.parseInt(this.tabela.getValueAt(numLinha, 2).toString());
+            // CORREÇÃO: Pela ordem alfabética (Curso, Matricula, Nome), a Matrícula é a coluna 1.
+            int matricula = Integer.parseInt(this.tabela.getValueAt(numLinha, 1).toString());
             
             for (Aluno a : conjAlunos) {
                 if (a.getMatricula() == matricula) {
