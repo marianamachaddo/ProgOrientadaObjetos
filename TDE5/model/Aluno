@@ -1,5 +1,8 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Aluno implements Comparable<Aluno> {
 
     final public static int TAMANHO_MAX_NOME = 40;
@@ -8,12 +11,14 @@ public class Aluno implements Comparable<Aluno> {
     private String nome;
 
     private Curso curso;
+    private List<Turma> turmas;
 
     public Aluno(int matricula, String nome, Curso curso)
             throws ModelException {
         this.setMatricula(matricula);
         this.setNome(nome);
         this.setCurso(curso);
+        this.turmas = new ArrayList<>();
     }
 
     public int getMatricula() {
@@ -48,7 +53,25 @@ public class Aluno implements Comparable<Aluno> {
 
         this.curso.adicionarAluno(this);
     }
+    
+    public List<Turma> getTurmas() {
+        return new ArrayList<>(turmas);
+    }
 
+    public void adicionarTurma(Turma t) {
+        if (!this.turmas.contains(t)) {
+            this.turmas.add(t);
+            t.adicionarAluno(this);
+        }
+    }
+
+    public void removerTurma(Turma t) {
+        if (this.turmas.contains(t)) {
+            this.turmas.remove(t);
+            t.removerAluno(this);
+        }
+    }
+    
     public static void validarMatricula(int matricula) throws ModelException {
         if (matricula <= 0)
             throw new ModelException("A matrícula do aluno deve ser maior que zero!");
@@ -75,5 +98,27 @@ public class Aluno implements Comparable<Aluno> {
     @Override
     public String toString() {
         return this.matricula + "-" + this.nome;
+    }
+    
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + matricula;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Aluno other = (Aluno) obj;
+        if (matricula != other.matricula)
+            return false;
+        return true;
     }
 }
