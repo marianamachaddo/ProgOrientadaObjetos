@@ -1,0 +1,88 @@
+package model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Turma {
+    private int codigo;
+    private String nome;
+    private String disciplina;
+
+    private List<Aluno> alunos;
+
+    public Turma(int codigo, String nome, String disciplina) throws ModelException {
+        this.setCodigo(codigo);
+        this.setNome(nome);
+        this.setDisciplina(disciplina);
+        this.alunos = new ArrayList<>();
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) throws ModelException {
+        if (codigo <= 0)
+            throw new ModelException("O código da turma deve ser maior que zero!");
+        this.codigo = codigo;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) throws ModelException {
+        if (nome == null || nome.trim().isEmpty())
+            throw new ModelException("O nome da turma não pode ser vazio!");
+        this.nome = nome;
+    }
+
+    public String getDisciplina() {
+        return disciplina;
+    }
+
+    public void setDisciplina(String disciplina) {
+        this.disciplina = disciplina;
+    }
+
+    public List<Aluno> getAlunos() {
+        return new ArrayList<>(alunos);
+    }
+
+    public void adicionarAluno(Aluno a) {
+        if (!this.alunos.contains(a)) {
+            this.alunos.add(a);
+            a.adicionarTurma(this);
+        }
+    }
+
+    public void removerAluno(Aluno a) {
+        if (this.alunos.contains(a)) {
+            this.alunos.remove(a);
+            a.removerTurma(this);
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + codigo;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        Turma other = (Turma) obj;
+        if (codigo != other.codigo) return false;
+        return true;
+    }
+    
+    @Override
+    public String toString() {
+        return this.nome;
+    }
+}
