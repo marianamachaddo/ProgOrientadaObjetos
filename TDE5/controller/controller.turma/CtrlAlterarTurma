@@ -1,0 +1,33 @@
+package controller.turma;
+
+import controller.CtrlAbstrato;
+import model.ModelException;
+import model.Turma;
+import model.dao.DaoTurma;
+
+public class CtrlAlterarTurma extends CtrlAbstratoTurma {
+
+    public CtrlAlterarTurma(CtrlAbstrato c, Turma t) {
+        super(c, t);
+    }
+
+    @Override
+    public void efetuar(String codigoStr, String nome, String disciplina) {
+        try {
+            int codigo = Integer.parseInt(codigoStr);
+            this.turma.setCodigo(codigo);
+            this.turma.setNome(nome);
+            this.turma.setDisciplina(disciplina);
+            
+            DaoTurma dao = new DaoTurma();
+            dao.alterar(this.turma);
+            
+            this.janela.notificar("Turma Alterada com Sucesso!");
+            this.encerrar();
+        } catch (NumberFormatException e) {
+            this.janela.notificar("O código da turma deve ser um número inteiro.");
+        } catch (ModelException e1) {
+            this.janela.notificar(e1.getMessage());
+        }
+    }
+}
