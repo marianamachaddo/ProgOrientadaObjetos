@@ -1,0 +1,86 @@
+package viewer;
+
+import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import controller.turma.CtrlManterTurmas;
+import model.Turma;
+
+public class JanelaConsultarTurmas extends JanelaAbstrata<CtrlManterTurmas> {
+    private JPanel contentPane;
+    private JTable tabela;
+    private ArrayList<Turma> conjTurmas;
+    private JScrollPane scrollPane;
+
+    public JanelaConsultarTurmas(CtrlManterTurmas ctrl, ArrayList<Turma> lista) {
+        super(ctrl);
+        setTitle("Manter Turmas");
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setBounds(100, 100, 550, 320);
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
+
+        JButton btSair = new JButton("Sair");
+        btSair.addActionListener(e -> getCtrl().encerrar());
+        btSair.setBounds(435, 247, 89, 23);
+        contentPane.add(btSair);
+
+        scrollPane = new JScrollPane();
+        scrollPane.setBounds(10, 11, 514, 220);
+        contentPane.add(scrollPane);
+        
+        atualizarDados(lista);
+
+        JButton btIncluir = new JButton("Incluir");
+        btIncluir.addActionListener(e -> getCtrl().iniciarIncluirTurma());
+        btIncluir.setBounds(10, 247, 89, 23);
+        contentPane.add(btIncluir);
+
+        JButton btAlterar = new JButton("Alterar");
+        btAlterar.addActionListener(e -> {
+            Turma turma = obterLinhaSelecionada();
+            getCtrl().iniciarAlterarTurma(turma);
+        });
+        btAlterar.setBounds(121, 247, 89, 23);
+        contentPane.add(btAlterar);
+
+        JButton btExcluir = new JButton("Excluir");
+        btExcluir.addActionListener(e -> {
+            Turma turma = obterLinhaSelecionada();
+            getCtrl().iniciarExcluirTurma(turma);
+        });
+        btExcluir.setBounds(231, 247, 89, 23);
+        contentPane.add(btExcluir);
+    }
+    
+    public void atualizarDados(ArrayList<Turma> lista) {
+        this.conjTurmas = lista;
+        Turma[] array = lista.toArray(new Turma[0]);
+        HelperTableModel h = new HelperTableModel(array);
+        this.tabela = new JTable(h.getTableModel());
+        new MeuHeaderListener(this.tabela); 
+        this.scrollPane.setViewportView(this.tabela);
+        this.scrollPane.revalidate();
+        this.scrollPane.repaint();
+    }
+
+    public Turma obterLinhaSelecionada() {
+        int numLinha = this.tabela.getSelectedRow();
+        if (numLinha != -1) {
+            // As colunas de Turma são Codigo, Disciplina, Nome. Código é a primeira.
+            int codigo = Integer.parseInt(this.tabela.getValueAt(numLinha, 0).toString());
+            for (Turma t : conjTurmas) {
+                if (t.getCodigo() == codigo) {
+                    return t;
+                }
+            }
+        }
+        return null;
+    }
+}
