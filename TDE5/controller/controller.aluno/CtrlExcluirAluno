@@ -34,4 +34,4 @@ public class CtrlExcluirAluno extends CtrlAbstrato {
     public Object getBemTangivel() {
         return this.aluno;
     }
-}CtrlExcluirAluno
+}
