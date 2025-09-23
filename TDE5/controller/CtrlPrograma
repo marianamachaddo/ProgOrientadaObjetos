@@ -1,14 +1,15 @@
-
 package controller;
 
 import controller.aluno.CtrlManterAlunos;
 import controller.curso.CtrlManterCursos;
+import controller.turma.CtrlManterTurmas;
 import viewer.JanelaPrincipal;
 
 public class CtrlPrograma extends CtrlAbstrato {
     private JanelaPrincipal janelaPrincipal;
     private CtrlManterCursos ctrlManterCursos;
     private CtrlManterAlunos ctrlManterAlunos;
+    private CtrlManterTurmas ctrlManterTurmas;
 
     public CtrlPrograma() {
         super(null);
@@ -36,6 +37,17 @@ public class CtrlPrograma extends CtrlAbstrato {
 
     public void manterAlunosFinalizado() {
         this.ctrlManterAlunos = null;
+    }
+
+    public void iniciarManterTurmas() {
+        if (this.ctrlManterTurmas == null)
+            this.ctrlManterTurmas = new CtrlManterTurmas(this);
+        else
+            this.janelaPrincipal.notificar("Este Caso de Uso já está em execução!");
+    }
+
+    public void manterTurmasFinalizado() {
+        this.ctrlManterTurmas = null;
     }
 
     @Override
