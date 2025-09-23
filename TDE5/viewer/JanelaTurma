@@ -1,0 +1,95 @@
+package viewer;
+
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import controller.turma.CtrlAbstratoTurma;
+import controller.turma.CtrlExcluirTurma;
+import model.Turma;
+
+public class JanelaTurma extends JanelaAbstrata<CtrlAbstratoTurma> {
+    private JPanel contentPane;
+    private JTextField tfCodigo;
+    private JTextField tfNome;
+    private JTextField tfDisciplina;
+
+    public JanelaTurma(CtrlAbstratoTurma ctrl, Turma turma) {
+        this(ctrl);
+
+        if (turma != null) {
+            tfCodigo.setText(String.valueOf(turma.getCodigo()));
+            tfNome.setText(turma.getNome());
+            tfDisciplina.setText(turma.getDisciplina());
+        }
+
+        if (ctrl instanceof CtrlExcluirTurma) {
+            setTitle("Excluir Turma");
+            tfCodigo.setEnabled(false);
+            tfNome.setEnabled(false);
+            tfDisciplina.setEnabled(false);
+            JLabel lbMsg = new JLabel("Deseja realmente excluir esta turma?");
+            lbMsg.setForeground(Color.RED);
+            lbMsg.setFont(new Font("Calibri", Font.BOLD, 14));
+            lbMsg.setBounds(100, 160, 265, 14);
+            contentPane.add(lbMsg);
+        } else if (turma != null) {
+            setTitle("Alterar Turma");
+        } else {
+            setTitle("Incluir Turma");
+        }
+    }
+
+    public JanelaTurma(CtrlAbstratoTurma ctrl) {
+        super(ctrl);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setBounds(100, 100, 450, 300);
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
+
+        JLabel lblCodigo = new JLabel("Código:");
+        lblCodigo.setBounds(33, 38, 60, 14);
+        contentPane.add(lblCodigo);
+
+        tfCodigo = new JTextField();
+        tfCodigo.setBounds(100, 35, 86, 20);
+        contentPane.add(tfCodigo);
+        tfCodigo.setColumns(10);
+
+        JLabel lblNome = new JLabel("Nome:");
+        lblNome.setBounds(33, 76, 46, 14);
+        contentPane.add(lblNome);
+
+        tfNome = new JTextField();
+        tfNome.setBounds(100, 73, 280, 20);
+        contentPane.add(tfNome);
+        tfNome.setColumns(10);
+        
+        JLabel lblDisciplina = new JLabel("Disciplina:");
+        lblDisciplina.setBounds(33, 114, 65, 14);
+        contentPane.add(lblDisciplina);
+        
+        tfDisciplina = new JTextField();
+        tfDisciplina.setBounds(100, 111, 280, 20);
+        contentPane.add(tfDisciplina);
+        tfDisciplina.setColumns(10);
+
+        JButton btOk = new JButton("Ok");
+        btOk.addActionListener(e -> {
+            getCtrl().efetuar(tfCodigo.getText(), tfNome.getText(), tfDisciplina.getText());
+        });
+        btOk.setBounds(95, 195, 89, 23);
+        contentPane.add(btOk);
+
+        JButton btCancelar = new JButton("Cancelar");
+        btCancelar.addActionListener(e -> getCtrl().encerrar());
+        btCancelar.setBounds(259, 195, 89, 23);
+        contentPane.add(btCancelar);
+    }
+}
