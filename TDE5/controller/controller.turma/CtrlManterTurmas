@@ -1,0 +1,58 @@
+package controller.turma;
+
+import java.util.ArrayList;
+import controller.CtrlAbstrato;
+import controller.CtrlPrograma;
+import model.Turma;
+import model.dao.DaoTurma;
+import viewer.JanelaConsultarTurmas;
+
+public class CtrlManterTurmas extends CtrlAbstrato {
+    private JanelaConsultarTurmas janela;
+    private CtrlAbstratoTurma ctrlTurma;
+
+    public CtrlManterTurmas(CtrlPrograma ctrlPai) {
+        super(ctrlPai);
+        DaoTurma dao = new DaoTurma();
+        this.janela = new JanelaConsultarTurmas(this, dao.obterTodos());
+        this.janela.apresentar();
+    }
+
+    public void iniciarIncluirTurma() {
+        this.ctrlTurma = new CtrlIncluirTurma(this);
+    }
+
+    public void iniciarAlterarTurma(Turma t) {
+        if (t != null) {
+            this.ctrlTurma = new CtrlAlterarTurma(this, t);
+        } else {
+            this.janela.notificar("Selecione uma turma para alterar.");
+        }
+    }
+
+    public void iniciarExcluirTurma(Turma t) {
+        if (t != null) {
+            this.ctrlTurma = new CtrlExcluirTurma(this, t);
+        } else {
+            this.janela.notificar("Selecione uma turma para excluir.");
+        }
+    }
+
+    public void fimOperacaoTurma() {
+        this.ctrlTurma = null;
+        DaoTurma dao = new DaoTurma();
+        this.janela.atualizarDados(dao.obterTodos());
+    }
+
+    @Override
+    public void encerrar() {
+        this.janela.fechar();
+        CtrlPrograma ctrl = (CtrlPrograma) getCtrlPai();
+        ctrl.manterTurmasFinalizado();
+    }
+
+    @Override
+    public Object getBemTangivel() {
+        return null;
+    }
+}
