@@ -43,7 +43,7 @@ public class JanelaAluno extends JanelaAbstrata {
             lbMsg.setFont(new Font("Calibri", Font.BOLD, 14));
             lbMsg.setBounds(100, 150, 265, 14);
             contentPane.add(lbMsg);
-        } else { // Alterar
+        } else {
             setTitle("Alterar Aluno");
             btOk.setText("Alterar");
         }
