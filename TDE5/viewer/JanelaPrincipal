@@ -13,7 +13,7 @@ public class JanelaPrincipal extends JanelaAbstrata<CtrlPrograma> {
         super(ctrl);
         setTitle("Menu Principal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 529, 207);
+        setBounds(100, 100, 600, 207);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -21,17 +21,22 @@ public class JanelaPrincipal extends JanelaAbstrata<CtrlPrograma> {
 
         JButton btCurso = new JButton("Manter Cursos");
         btCurso.addActionListener(e -> getCtrl().iniciarManterCursos());
-        btCurso.setBounds(33, 53, 140, 66);
+        btCurso.setBounds(10, 53, 130, 66);
         contentPane.add(btCurso);
-
-        JButton btFechar = new JButton("Fechar");
-        btFechar.addActionListener(e -> getCtrl().encerrar());
-        btFechar.setBounds(366, 53, 119, 66);
-        contentPane.add(btFechar);
 
         JButton btAluno = new JButton("Manter Alunos");
         btAluno.addActionListener(e -> getCtrl().iniciarManterAlunos());
-        btAluno.setBounds(195, 53, 140, 66);
+        btAluno.setBounds(150, 53, 130, 66);
         contentPane.add(btAluno);
+        
+        JButton btTurma = new JButton("Manter Turmas");
+        btTurma.addActionListener(e -> getCtrl().iniciarManterTurmas());
+        btTurma.setBounds(290, 53, 130, 66);
+        contentPane.add(btTurma);
+
+        JButton btFechar = new JButton("Fechar");
+        btFechar.addActionListener(e -> getCtrl().encerrar());
+        btFechar.setBounds(430, 53, 130, 66);
+        contentPane.add(btFechar);
     }
 }
