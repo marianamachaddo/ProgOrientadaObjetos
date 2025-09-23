@@ -87,7 +87,6 @@ public class Curso {
             throw new ModelException("É necessário indicar o aluno para essa operação");
     }
 
-  
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -109,5 +108,4 @@ public class Curso {
             return false;
         return true;
     }
-    
 }
