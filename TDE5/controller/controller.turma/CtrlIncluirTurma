@@ -1,0 +1,28 @@
+package controller.turma;
+
+import controller.CtrlAbstrato;
+import model.ModelException;
+import model.Turma;
+import model.dao.DaoTurma;
+
+public class CtrlIncluirTurma extends CtrlAbstratoTurma {
+    public CtrlIncluirTurma(CtrlAbstrato c) {
+        super(c);
+    }
+
+    @Override
+    public void efetuar(String codigoStr, String nome, String disciplina) {
+        try {
+            int codigo = Integer.parseInt(codigoStr);
+            this.turma = new Turma(codigo, nome, disciplina);
+            DaoTurma dao = new DaoTurma();
+            dao.adicionar(this.turma);
+            this.janela.notificar("Turma Criada!");
+            this.encerrar();
+        } catch (NumberFormatException e) {
+            this.janela.notificar("O código deve ser um número inteiro.");
+        } catch (ModelException e1) {
+            this.janela.notificar(e1.getMessage());
+        }
+    }
+}
