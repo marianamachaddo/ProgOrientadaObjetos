@@ -1,0 +1,21 @@
+package controller.turma;
+
+import controller.CtrlAbstrato;
+import model.Turma;
+import model.dao.DaoTurma;
+
+public class CtrlExcluirTurma extends CtrlAbstratoTurma {
+
+    public CtrlExcluirTurma(CtrlAbstrato c, Turma t) {
+        super(c, t);
+    }
+
+    @Override
+    public void efetuar(String codigo, String nome, String disciplina) {
+        DaoTurma dao = new DaoTurma();
+        dao.excluir(this.turma);
+        
+        this.janela.notificar("Turma Excluída com Sucesso!");
+        this.encerrar();
+    }
+}
