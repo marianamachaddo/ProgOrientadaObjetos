@@ -34,7 +34,7 @@ public class JanelaConsultarCursos extends JanelaAbstrata<CtrlManterCursos> {
         scrollPane = new JScrollPane();
         scrollPane.setBounds(10, 11, 514, 220);
         contentPane.add(scrollPane);
-        
+
         atualizarDados(lista);
 
         JButton btIncluir = new JButton("Incluir");
@@ -63,10 +63,10 @@ public class JanelaConsultarCursos extends JanelaAbstrata<CtrlManterCursos> {
         this.conjCursos = lista;
         Curso[] array = lista.toArray(new Curso[0]);
         HelperTableModel h = new HelperTableModel(array);
-
+        
         this.tabela = new JTable(h.getTableModel());
         new MeuHeaderListener(this.tabela); 
-
+        
         this.scrollPane.setViewportView(this.tabela);
         this.scrollPane.revalidate();
         this.scrollPane.repaint();
@@ -75,8 +75,8 @@ public class JanelaConsultarCursos extends JanelaAbstrata<CtrlManterCursos> {
     public Curso obterLinhaSelecionada() {
         int numLinha = this.tabela.getSelectedRow();
         if (numLinha != -1) {
-           
-            int codigo = Integer.parseInt(this.tabela.getValueAt(numLinha, 1).toString());
+            // CORREÇÃO: Pela ordem alfabética, o Código do Curso é a coluna 0.
+            int codigo = Integer.parseInt(this.tabela.getValueAt(numLinha, 0).toString());
             
             for (Curso c : conjCursos) {
                 if (c.getCodigo() == codigo) {
