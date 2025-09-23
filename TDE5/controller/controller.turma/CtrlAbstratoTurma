@@ -1,0 +1,35 @@
+package controller.turma;
+
+import controller.CtrlAbstrato;
+import model.Turma;
+import viewer.JanelaTurma;
+
+abstract public class CtrlAbstratoTurma extends CtrlAbstrato {
+    protected JanelaTurma janela;
+    protected Turma turma;
+
+    public CtrlAbstratoTurma(CtrlAbstrato ctrlPai, Turma turma) {
+        super(ctrlPai);
+        this.turma = turma;
+        this.janela = new JanelaTurma(this, turma);
+        this.janela.apresentar();
+    }
+
+    public CtrlAbstratoTurma(CtrlAbstrato ctrlPai) {
+        this(ctrlPai, null);
+    }
+
+    abstract public void efetuar(String codigo, String nome, String disciplina);
+
+    @Override
+    public void encerrar() {
+        this.janela.fechar();
+        CtrlManterTurmas c = (CtrlManterTurmas) this.getCtrlPai();
+        c.fimOperacaoTurma();
+    }
+
+    @Override
+    public Object getBemTangivel() {
+        return this.turma;
+    }
+}
